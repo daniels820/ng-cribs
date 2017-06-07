@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!--<title>ng-cribs</title>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/imagePopUp.css">
+</head>
+
+<body ng-app="ngCribs" ng-controller='cribsController'>
+    <!-- nav bar -->
+    <!--<nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand">ng-cribs</a>
+            </div>
+
+        </div>
+
+    </nav>-->
+    <!-- nav bar -->
+    <h1 class="jumbotron title ">{{ title }}</h1>
+    <!-- Min and Max Form -->
+    <div class="container">
+        <div class="col-sm-12 price-form">
+
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-addon">Min Price</span>
+                    <select class="form-control" name="minPrice" id="minPrice" ng-model="priceInfo.min"> 
+            <option value="100000">$100,000</option>
+            <option value="200000">$200,000</option>
+            <option value="300000">$300,000</option>
+            <option value="400000">$400,000</option>
+            <option value="500000">$500,000</option>
+            <option value="600000">$600,000</option>
+            <option value="700000">$700,000</option>
+            <option value="800000">$800,000</option>
+            <option value="900000">$900,000</option>
+            <option value="1000000">$1,000,000</option>
+
+        </select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-addon">Max Price</span>
+                    <select class="form-control" name="maxPrice" id="maxPrice" ng-model="priceInfo.max"> 
+            <option value="100000">$100,000</option>
+            <option value="200000">$200,000</option>
+            <option value="300000">$300,000</option>
+            <option value="400000">$400,000</option>
+            <option value="500000">$500,000</option>
+            <option value="600000">$600,000</option>
+            <option value="700000">$700,000</option>
+            <option value="800000">$800,000</option>
+            <option value="900000">$900,000</option>
+            <option value="1000000">$1,000,000</option>
+
+
+        </select>
+                </div>
+            </div>
+        </div>
+        <!--Add a crib-->
+        <div class="addButtonDiv" ng-hide ="addListing==true">
+            <button class="btn btn-primary addButton" ng-click="addListing = !addListing" > Add New Listing</button>
+        </div>
+
+        <div class="listong-form" ng-show="addListing" >
+            <h3>Add new listing</h3>
+            <button class="btn btn-danger" ng-click="addListing=false" > Close</button>
+            
+            <button class="btn btn-primary listing-button" ng-click="addCrib(newListing)" ng-show="addListing">Add</button>
+            <div class="row listing-form-row">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Address:</span>
+                        <input class="form-control" type="text" placeholder="address" ng-model="newListing.address">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Price:</span>
+                        <input class="form-control" type="text" placeholder="price $$$" ng-model="newListing.price">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Property type:</span>
+                        <select name="propertyType" id="propertyType" class="form-control" ng-model="newListing.type">
+                <option value="House">House</option>
+                <option value="Condo">Condo</option>
+                <option value="Duplex">Duplex</option>
+                <option value="Apartment">Apartment</option>
+                
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row listing-form-row">
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Bed Rooms:</span>
+                        <input class="form-control" type="text" placeholder="Bed Rooms" ng-model="newListing.details.bedrooms">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Bath Rooms:</span>
+                        <input class="form-control" type="text" placeholder="Bath Rooms" ng-model="newListing.details.bathrooms">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">sqft:</span>
+                        <input class="form-control" type="text" placeholder="sqft" ng-model="newListing.details.area">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Description</span>
+                        <input class="form-control" type="text" placeholder="TELL US MORE" ng-model="newListing.description">
+                    </div>
+                </div>
+                <!--<pre>{{newListing | json}}</pre>-->
+            </div>
+        </div>
+        <!--Add a crib - END -->
+        <!--Edit section -->
+        <div class="listing-form" ng-if="showEdit">
+            <h3>Edit listing</h3>
+            <div class="row listing-form-row">
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Address:</span>
+                        <input class="form-control" type="text" placeholder="address" ng-model="existingListing.address">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Price:</span>
+                        <input class="form-control" type="text" placeholder="price $$$" ng-model="existingListing.price">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Property type:</span>
+                        <select name="propertyType" id="propertyType" class="form-control" ng-model="existingListing.type">
+                <option value="House">House</option>
+                <option value="Condo">Condo</option>
+                <option value="Duplex">Duplex</option>
+                <option value="Apartment">Apartment</option>
+                
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row listing-form-row">
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Bed Rooms:</span>
+                        <input class="form-control" type="text" placeholder="Bed Rooms" ng-model="existingListing.details.bedrooms">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Bath Rooms:</span>
+                        <input class="form-control" type="text" placeholder="Bath Rooms" ng-model="existingListing.details.bathrooms">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">sqft:</span>
+                        <input class="form-control" type="text" placeholder="sqft" ng-model="existingListing.details.area">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Description</span>
+                        <input class="form-control" type="text" placeholder="TELL US MORE" ng-model="existingListing.description">
+                    </div>
+                </div>
+                <button class="btn btn-primary listing-button" ng-click="saveEditCrib()" ng-show="showEdit">Save</button>
+                <button class="btn btn-danger listing-button" ng-click="deleteCrib(existingListing)" ng-show="showEdit">Delete</button>
+            </div>
+        </div>
+        <!-- Edit section -->
+    </div>
+    <!--<div class="addButtonDiv">
+        <button class="btn btn-primary addButton" ng-click="addListing = !addListing" ng-hide =addListing> Add New Listing</button>
+    </div>-->
+    <!-- crib's details' -->
+    <div class="container">
+        <div class="col-sm-4" ng-repeat="crib in cribs | cribsFilter:priceInfo | orderBy: '-id'">
+            <div class="thumbnail">
+                <img id="myImg" class="myImg" ng-src="/images/{{crib.image}}.jpg">
+                <!-- The enlarge imagePopUp -->
+                <div id="myModal" class="modal">
+                    <span class="close">&times;</span>
+                    <img class="modal-content" id="img01">
+                    <div id="caption"></div>
+                </div>
+            </div>
+            <div class="caption">
+                <div ng-hide="showDetails === true">
+                    <h3> <i class="glyphicon glyphicon-tag"></i> {{crib.price | currency}}</h3>
+                    <h4><i class="glyphicon glyphicon-home"></i> {{crib.address}}
+                        <span class="label label-primary label-sm">{{crib.type}}</span></h4>
+                </div>
+                <div class="details" ng-show="showDetails === true">
+                    <h4>
+                        <span class="label label-primary" style="margin-right: 3px;">Beds: {{crib.details.bedrooms}} </span>
+                        <span class="label label-primary" style="margin-right: 3px;">Bathes: {{crib.details.bathrooms}} </span>
+                        <span class="label label-primary" style="margin-right: 3px;">sqft: {{crib.details.area}} </span>
+                    </h4>
+                    <p>{{crib.description}}</p>
+                </div>
+                <button class="btn btn-xs btn-success" ng-hide="showDetails === true" ng-click="showDetails =!showDetails"> Show details</button>
+                <button class="btn btn-xs btn-danger" ng-show="showDetails === true" ng-click="showDetails =!showDetails"> Hide details</button>
+                <button class="btn btn-xs btn-primary" ng-show="showDetails" ng-click="editCrib(crib)"> Edit</button>
+                <!--<h3>{{crib.address}}</h3>
+                <p><strong>Type:</strong>{{crib.type}}</p>
+                <p><strong>Description:</strong>{{ crib.description }}</p>
+                <p><strong>Price:</strong>{{ crib.price | currency }}</p>-->
+            </div>
+        </div>
+    </div>
+    <!--<button ng-click="showMessage = !showMessage"> Toggle message </button>-->
+    <!--<h2 ng-show="showMessage == true">secret message </h2>-->
+    <!--<input type="text" placeholder="write something..." ng-model="message"></input>
+<h2>{{message}}</h2>-->
+    <!--<div class="well" ng-repeat='crib in cribs'>
+<h3>{{crib.address}}</h3>	
+<p ><strong>Type:</strong>{{crib.type}}</p>
+<p ><strong>Description:</strong>{{ crib.description }}</p>
+<p ><strong>Price:</strong>{{ crib.price | currency }}</p>
+</div>--> 
+    <!--<pre>{{cribs | json }}<pre>-->
+
+    <footer class="footer">
+        <div class="container">
+            <p>D Shnayderman</p>
+        </div>
+    </footer>
+    
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.4.0/ui-bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.4.0/ui-bootstrap-tpls.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript" src="js/controllers/cribsController.js"></script>
+<script type="text/javascript" src="js/services/cribsFactory.js"></script>
+<script type="text/javascript" src="js/cribsFilter.js"></script>
+<script type="text/javascript" src="js/imagePopUp.js"></script>
+
+</html>
